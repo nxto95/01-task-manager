@@ -1,0 +1,38 @@
+services:
+  application:
+    container_name: application_container
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      - DB_HOST=mysql
+      - DB_USER=app_user
+      - DB_PASSWORD=app_password
+      - DB_NAME=app_db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    command: npm run start:dev
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql-data:
