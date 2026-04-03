@@ -15,10 +15,14 @@ import { CreateUserDto, UpdateUserDto } from 'src/dtos';
 import type { Response, Request } from 'express';
 import { JwtGuard, LocalGuard } from './guards';
 import { CurrentUser } from './decorators';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('register')
   async register(
@@ -61,7 +65,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const userId = user.sub;
-    await this.authService.delete(userId);
+    await this.usersService.delete(userId);
     this.authService.logout(res);
     return { message: 'user deleted successfully' };
   }
@@ -74,7 +78,7 @@ export class AuthController {
     @Body() dto: UpdateUserDto,
   ) {
     const userId = user.sub;
-    await this.authService.update(userId, dto);
+    await this.usersService.update(userId, dto);
     return { message: 'user updated successfully' };
   }
 }
