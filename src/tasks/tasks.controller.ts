@@ -28,7 +28,7 @@ export class TasksController {
     const userId = user.sub;
     const task = await this.tasksService.create(userId, dto);
     return {
-      message: 'task created successfully',
+      message: 'Task created successfully',
       data: task,
     };
   }
@@ -38,7 +38,7 @@ export class TasksController {
     const userId = user.sub;
     const [tasks, count] = await this.tasksService.getAll(userId);
     return {
-      message: 'tasks listed successfully',
+      message: 'Tasks retrieved successfully',
       meta: {
         itemsCount: count,
       },
@@ -51,11 +51,22 @@ export class TasksController {
     const userId = user.sub;
     const [tasks, count] = await this.tasksService.getAllDeleted(userId);
     return {
-      message: 'deleted tasks listed successfully',
+      message: 'Deleted tasks retrieved successfully',
       meta: {
         itemsCount: count,
       },
       data: tasks,
+    };
+  }
+
+  @Delete('purge') // Clearer name than 'emptying'
+  @HttpCode(HttpStatus.OK)
+  async purgeAllDeleted(@CurrentUser() user: { sub: string }) {
+    const userId = user.sub;
+    const result = await this.tasksService.deleteAllDeletedTasks(userId);
+    return {
+      message: 'All deleted tasks permanently removed',
+      affected: result.affected,
     };
   }
 
@@ -67,7 +78,7 @@ export class TasksController {
     const userId = user.sub;
     const task = await this.tasksService.getById(userId, taskId);
     return {
-      message: 'task listed successfully',
+      message: 'Task retrieved successfully',
       data: task,
     };
   }
@@ -81,7 +92,7 @@ export class TasksController {
     const userId = user.sub;
     await this.tasksService.delete(userId, taskId);
     return {
-      message: 'task deleted successfully',
+      message: 'Task deleted successfully',
     };
   }
 
@@ -95,7 +106,20 @@ export class TasksController {
     const userId = user.sub;
     await this.tasksService.update(userId, taskId, dto);
     return {
-      message: 'task updated successfully',
+      message: 'Task updated successfully',
+    };
+  }
+
+  @Patch(':taskId/restore') // RESTful sub-resource pattern
+  @HttpCode(HttpStatus.OK)
+  async restoreDeleted(
+    @CurrentUser() user: { sub: string },
+    @Param('taskId') taskId: string,
+  ) {
+    const userId = user.sub;
+    await this.tasksService.restoreDeletedTask(userId, taskId);
+    return {
+      message: 'Task restored successfully',
     };
   }
 }
