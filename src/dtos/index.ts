@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsString, Length, MinLength } from 'class-validator';
+import { IsOptional, IsString, Length, MinLength } from 'class-validator';
 
 function Normalize() {
   return Transform(({ value }): string =>
@@ -23,5 +23,26 @@ export class UpdateUserDto {
   username: string;
 }
 
-export class CreateTaskDto {}
-export class UpdateTaskDto {}
+export class CreateTaskDto {
+  @Normalize()
+  @IsString()
+  @Length(2, 55)
+  title: string;
+  @Normalize()
+  @IsString()
+  @Length(2, 1024)
+  @IsOptional()
+  description?: string;
+}
+export class UpdateTaskDto {
+  @Normalize()
+  @IsString()
+  @Length(2, 55)
+  @IsOptional()
+  title?: string;
+  @Normalize()
+  @IsString()
+  @Length(2, 1024)
+  @IsOptional()
+  description?: string;
+}
