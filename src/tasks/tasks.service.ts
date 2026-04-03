@@ -99,4 +99,58 @@ export class TasksService {
       deletedAt: Not(IsNull()),
     });
   }
+
+  async completeTask(userId: string, taskId: string) {
+    const updateResult = await this.dataSource.manager.update(
+      Task,
+      {
+        id: taskId,
+        author: userId,
+      },
+      { status: TaskStatus.COMPLETED },
+    );
+    if (updateResult.affected === 0)
+      throw new NotFoundException('task not found');
+    return updateResult;
+  }
+  async cancelTask(userId: string, taskId: string) {
+    const updateResult = await this.dataSource.manager.update(
+      Task,
+      {
+        id: taskId,
+        author: userId,
+      },
+      { status: TaskStatus.CANCELED },
+    );
+    if (updateResult.affected === 0)
+      throw new NotFoundException('task not found');
+    return updateResult;
+  }
+  async pendingTask(userId: string, taskId: string) {
+    const updateResult = await this.dataSource.manager.update(
+      Task,
+      {
+        id: taskId,
+        author: userId,
+      },
+      { status: TaskStatus.PENDING },
+    );
+    if (updateResult.affected === 0)
+      throw new NotFoundException('task not found');
+    return updateResult;
+  }
+
+  async inProgressTask(userId: string, taskId: string) {
+    const updateResult = await this.dataSource.manager.update(
+      Task,
+      {
+        id: taskId,
+        author: userId,
+      },
+      { status: TaskStatus.IN_PROGRESS },
+    );
+    if (updateResult.affected === 0)
+      throw new NotFoundException('task not found');
+    return updateResult;
+  }
 }

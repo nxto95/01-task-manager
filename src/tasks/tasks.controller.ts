@@ -122,4 +122,56 @@ export class TasksController {
       message: 'Task restored successfully',
     };
   }
+
+  @Patch(':taskId/pending')
+  @HttpCode(HttpStatus.OK)
+  async pending(
+    @CurrentUser() user: { sub: string },
+    @Param('taskId') taskId: string,
+  ) {
+    const userId = user.sub;
+    await this.tasksService.pendingTask(userId, taskId);
+    return {
+      message: 'Task pended successfully',
+    };
+  }
+
+  @Patch(':taskId/cancel')
+  @HttpCode(HttpStatus.OK)
+  async completeTask(
+    @CurrentUser() user: { sub: string },
+    @Param('taskId') taskId: string,
+  ) {
+    const userId = user.sub;
+    await this.tasksService.cancelTask(userId, taskId);
+    return {
+      message: 'Task canceled successfully',
+    };
+  }
+
+  @Patch(':taskId/complete')
+  @HttpCode(HttpStatus.OK)
+  async cancelTask(
+    @CurrentUser() user: { sub: string },
+    @Param('taskId') taskId: string,
+  ) {
+    const userId = user.sub;
+    await this.tasksService.completeTask(userId, taskId);
+    return {
+      message: 'Task completed successfully',
+    };
+  }
+
+  @Patch(':taskId/in-progress')
+  @HttpCode(HttpStatus.OK)
+  async inProgress(
+    @CurrentUser() user: { sub: string },
+    @Param('taskId') taskId: string,
+  ) {
+    const userId = user.sub;
+    await this.tasksService.inProgressTask(userId, taskId);
+    return {
+      message: 'Task in-progress successfully',
+    };
+  }
 }
