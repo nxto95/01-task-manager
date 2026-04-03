@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -19,7 +17,6 @@ import { envValidationSchema } from './config/env.validation';
       inject: [ConfigService],
       useFactory: databaseConfig,
     }),
-    UsersModule,
     AuthModule,
     TasksModule,
   ],

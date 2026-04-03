@@ -14,6 +14,7 @@ export class User {
   username: string;
   @Column()
   password: string;
+
   @CreateDateColumn()
   createdAt: Date;
   @UpdateDateColumn()

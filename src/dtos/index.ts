@@ -15,5 +15,13 @@ export class CreateUserDto {
   @MinLength(8)
   password: string;
 }
+
+export class UpdateUserDto {
+  @Normalize()
+  @IsString()
+  @Length(2, 55)
+  username: string;
+}
+
 export class CreateTaskDto {}
 export class UpdateTaskDto {}

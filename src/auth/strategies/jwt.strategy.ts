@@ -1,8 +1,8 @@
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ACCESS_TOKEN_KEY, IJwtPayload, SECRET } from './auth.service';
 import { Request } from 'express';
+import { ACCESS_TOKEN_KEY, IJwtPayload, SECRET } from '../auth.service';
 
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly config: ConfigService) {
@@ -18,6 +18,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   validate(payload: IJwtPayload) {
-    return { userId: payload.sub };
+    return payload;
   }
 }
